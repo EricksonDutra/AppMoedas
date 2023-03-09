@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:moeda_app/pages/moedas_detalhes_page.dart';
 import 'package:moeda_app/repositories/moeda_repository.dart';
 
 import '../models/moeda.dart';
@@ -49,6 +50,15 @@ class _MoedasPageState extends State<MoedasPage> {
     }
   }
 
+  mostrarDetalhes(Moeda moeda) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MoedasDetalhesPage(moeda: moeda),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,29 +67,31 @@ class _MoedasPageState extends State<MoedasPage> {
         child: ListView.separated(
           itemBuilder: (BuildContext context, int moeda) {
             return ListTile(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                leading: select.contains(tabela[moeda])
-                    ? const Icon(Icons.money_off_outlined)
-                    : const CircleAvatar(
-                        child: Icon(
-                          Icons.arrow_back,
-                        ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              leading: select.contains(tabela[moeda])
+                  ? const Icon(Icons.money_off_outlined)
+                  : const CircleAvatar(
+                      child: Icon(
+                        Icons.arrow_back,
                       ),
-                title: Text(tabela[moeda].nome,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w500)),
-                trailing: Text(real.format(tabela[moeda].preco)),
-                selected: select.contains(tabela[moeda]),
-                selectedTileColor: Colors.purple[50],
-                onTap: () {
-                  setState(() {
-                    (select.contains(tabela[moeda]))
-                        ? select.remove(tabela[moeda])
-                        : select.add(tabela[moeda]);
-                  });
+                    ),
+              title: Text(tabela[moeda].nome,
+                  style: const TextStyle(
+                      fontSize: 17, fontWeight: FontWeight.w500)),
+              trailing: Text(real.format(tabela[moeda].preco)),
+              selected: select.contains(tabela[moeda]),
+              selectedTileColor: Colors.purple[50],
+              onLongPress: () {
+                setState(() {
+                  (select.contains(tabela[moeda]))
+                      ? select.remove(tabela[moeda])
+                      : select.add(tabela[moeda]);
                 });
+              },
+              onTap: () => mostrarDetalhes(tabela[moeda]),
+            );
           },
           padding: const EdgeInsets.all(16),
           separatorBuilder: (_, __) => const Divider(),
